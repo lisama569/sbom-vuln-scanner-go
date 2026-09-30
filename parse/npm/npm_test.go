@@ -183,3 +183,34 @@ func TestParse_EmptyLockfile_ParseFailed(t *testing.T) {
 	}
 	t.Logf("raw=%q -> %v", raw, err)
 }
+
+func TestParseV3_NestedScopedTransitive(t *testing.T) {
+	raw := `{
+	  "lockfileVersion": 3,
+	  "packages": {
+	    "": { "dependencies": { "top": "1.0.0" } },
+	    "node_modules/top": { "version": "1.0.0" },
+	    "node_modules/top/node_modules/@scope/nested": { "version": "2.0.0" },
+	    "node_modules/@scope/direct": { "version": "3.0.0" }
+	  }
+	}`
+	p := writeLock(t, raw)
+	m, err := New().Parse(context.Background(), p)
+	if err != nil {
+		t.Fatal(err)
+	}
+	logManifest(t, raw, m)
+	sc := map[string]component.Scope{}
+	for _, c := range m.Components {
+		sc[c.Name] = c.Scope
+	}
+	if sc["top"] != component.ScopeDirect {
+		t.Errorf("top scope=%s", sc["top"])
+	}
+	if sc["@scope/nested"] != component.ScopeTransitive {
+		t.Errorf("nested scoped scope=%s want transitive", sc["@scope/nested"])
+	}
+	if sc["@scope/direct"] != component.ScopeTransitive {
+		t.Errorf("undecclared top-level scoped is transitive by convention, got %s", sc["@scope/direct"])
+	}
+}

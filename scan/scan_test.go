@@ -106,3 +106,25 @@ func TestScan_NilDB_Internal(t *testing.T) {
 		t.Fatalf("nil db: %+v", r)
 	}
 }
+
+// panicParser panics inside Parse; the scanner must recover and classify it as
+// FailureInternal rather than crashing or calling it a target failure.
+type panicParser struct{}
+
+func (panicParser) Format() string { return "panic" }
+func (panicParser) Parse(ctx context.Context, path string) (*component.Manifest, error) {
+	panic("kaboom")
+}
+
+func init() { parse.Register(panicParser{}) }
+
+func TestScan_PanicClassifiedInternal(t *testing.T) {
+	r := scan.New(newDB(t)).Scan(context.Background(), scan.Target{Format: "panic", Path: "x"})
+	if r.OK() {
+		t.Fatal("panic must not be OK")
+	}
+	if r.Failure.Class != scan.FailureInternal {
+		t.Fatalf("class=%s want internal", r.Failure.Class)
+	}
+	t.Logf("panic -> %s", r.Failure)
+}

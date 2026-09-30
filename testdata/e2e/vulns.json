@@ -1,0 +1,16 @@
+{
+  "revision": "2024-09-01-local",
+  "advisories": [
+    {"id": "CVE-2024-1001", "ecosystem": "npm", "package": "left-pad", "summary": "RCE in left-pad",
+     "affected": [[{"op":">=","version":"1.0.0"},{"op":"<","version":"1.5.0"}]]},
+    {"id": "CVE-2024-1002", "ecosystem": "npm", "package": "pkg-union",
+     "summary": "union ranges + prerelease",
+     "affected": [
+       [{"op":">=","version":"1.0.0"},{"op":"<","version":"1.5.0"}],
+       [{"op":">=","version":"2.0.0"},{"op":"<","version":"2.1.0"}]
+     ]},
+    {"id": "GO-2024-2001", "ecosystem": "gomod", "package": "github.com/vuln/mod",
+     "summary": "go module advisory",
+     "affected": [[{"op":">=","version":"1.0.0"},{"op":"<","version":"1.2.0"}]]}
+  ]
+}

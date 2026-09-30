@@ -64,10 +64,13 @@ func (t Target) Key() string { return t.Format + ":" + t.Path }
 // as a clean conclusion. Rejected/Warning counts are carried so even a
 // successful parse with refused records stays visible.
 type Result struct {
-	Target   Target
-	Manifest *component.Manifest
-	Findings []match.Finding
-	Failure  *Failure
+	Target Target
+	// DBRevision embeds the exact vulnerability-database snapshot used, so a
+	// historical conclusion can be reproduced after the rules file changes.
+	DBRevision string
+	Manifest   *component.Manifest
+	Findings   []match.Finding
+	Failure    *Failure
 }
 
 // OK reports whether the target was scanned without failure. A successful
@@ -100,6 +103,7 @@ func (s *Scanner) Scan(ctx context.Context, t Target) (result *Result) {
 		result.Failure = &Failure{Class: FailureInternal, Target: t, Err: fmt.Errorf("nil vulnerability database")}
 		return result
 	}
+	result.DBRevision = s.db.Revision
 	p := parse.Get(t.Format)
 	if p == nil {
 		result.Failure = &Failure{Class: FailureTarget, Target: t,

@@ -1,0 +1,48 @@
+[
+  {
+    "id": "GO-2024-0001",
+    "ecosystem": "go",
+    "package": "example.com/oldlib",
+    "summary": "oldlib 在 1.5.0 前存在越界读取",
+    "affected": [
+      { "introduced": "1.0.0", "fixed": "1.5.0" }
+    ]
+  },
+  {
+    "id": "GO-2024-0002",
+    "ecosystem": "go",
+    "package": "example.com/unionlib",
+    "summary": "unionlib 存在两段不连续受影响区间（多区间并集）",
+    "affected": [
+      { "introduced": "1.0.0", "fixed": "1.2.0" },
+      { "introduced": "2.0.0", "fixed": "2.1.0" }
+    ]
+  },
+  {
+    "id": "GO-2024-0003",
+    "ecosystem": "go",
+    "package": "example.com/openlib",
+    "summary": "openlib 自 3.0.0 起的漏洞尚无修复版本",
+    "affected": [
+      { "introduced": "3.0.0", "fixed": "" }
+    ]
+  },
+  {
+    "id": "NPM-2024-1001",
+    "ecosystem": "npm",
+    "package": "left-pad-lite",
+    "summary": "left-pad-lite <2.0.0 原型污染；预发布 2.0.0-rc.1 仍未修复",
+    "affected": [
+      { "introduced": "0", "fixed": "2.0.0" }
+    ]
+  },
+  {
+    "id": "PYPI-2024-2001",
+    "ecosystem": "pypi",
+    "package": "requests-like",
+    "summary": "requests-like 2.20.x 存在信息泄露，2.21.0 修复",
+    "affected": [
+      { "introduced": "2.20.0", "fixed": "2.21.0" }
+    ]
+  }
+]

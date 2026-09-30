@@ -156,13 +156,15 @@ func parseV2V3(lf *lockfile, path string, comps *[]component.Component, rejected
 				Source: src, Raw: rawKeyV2(key, pkg)})
 			continue
 		}
-		if _, verr := semver.Parse(strings.TrimSpace(pkg.Version)); verr != nil {
+		pv, verr := semver.Parse(strings.TrimSpace(pkg.Version))
+		if verr != nil {
 			*rejected = append(*rejected, component.Rejected{
 				Reason: component.RejectInvalidVersion,
 				Detail: fmt.Sprintf("package %s version %q: %v", name, pkg.Version, verr),
 				Source: src, Raw: rawKeyV2(key, pkg)})
 			continue
 		}
+		canonVer := pv.String()
 
 		scope := component.ScopeTransitive
 		if _, isDirect := direct[name]; isDirect && !isNested(key) {
@@ -175,7 +177,7 @@ func parseV2V3(lf *lockfile, path string, comps *[]component.Component, rejected
 		}
 
 		c := component.Component{
-			Ecosystem: "npm", Name: name, Version: strings.TrimSpace(pkg.Version),
+			Ecosystem: "npm", Name: name, Version: canonVer,
 			Scope: scope, Source: src,
 		}
 		c.DependsOn = appendDepNames(c.DependsOn, pkg.Dependencies)
@@ -198,7 +200,7 @@ func parseV1(lf *lockfile, path string, comps *[]component.Component, rejected *
 		if strings.TrimSpace(d.Version) == "" {
 			*rejected = append(*rejected, component.Rejected{
 				Reason: component.RejectMissingVersion, Detail: "v1 node " + name + " without version", Source: src, Raw: key})
-		} else if _, verr := semver.Parse(strings.TrimSpace(d.Version)); verr != nil {
+		} else if pv, verr := semver.Parse(strings.TrimSpace(d.Version)); verr != nil {
 			*rejected = append(*rejected, component.Rejected{
 				Reason: component.RejectInvalidVersion,
 				Detail: fmt.Sprintf("v1 node %s version %q: %v", name, d.Version, verr), Source: src, Raw: key})
@@ -207,7 +209,7 @@ func parseV1(lf *lockfile, path string, comps *[]component.Component, rejected *
 			if direct {
 				scope = component.ScopeDirect
 			}
-			c := component.Component{Ecosystem: "npm", Name: name, Version: strings.TrimSpace(d.Version), Scope: scope, Source: src}
+			c := component.Component{Ecosystem: "npm", Name: name, Version: pv.String(), Scope: scope, Source: src}
 			c.DependsOn = appendDepNames(c.DependsOn, d.Requires)
 			*comps = append(*comps, c)
 		}

@@ -215,3 +215,5 @@ func acceptRequire(path string, ln line, text string, replacements map[string]st
 	*comps = append(*comps, component.Component{
 		Ecosystem: "gomod", Name: name, Version: ver, Scope: component.ScopeDirect, Source: src})
 }
+
+func init() { parse.Register(New()) }

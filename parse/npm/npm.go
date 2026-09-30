@@ -281,3 +281,5 @@ func appendDepNames(in []string, m map[string]string) []string {
 func rawKeyV2(key string, pkg lockPkg) string {
 	return fmt.Sprintf("packages[%q]={version:%q name:%q link:%t}", key, pkg.Version, pkg.Name, pkg.Link)
 }
+
+func init() { parse.Register(New()) }

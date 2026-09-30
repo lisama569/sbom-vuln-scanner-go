@@ -35,15 +35,15 @@ func TestLoadFS_OK(t *testing.T) {
 
 func TestLoadFS_InvalidRejected(t *testing.T) {
 	bads := map[string]string{
-		"bad json":             `{not json`,
-		"missing id":           `{"advisories":[{"ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
-		"duplicate id":         `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]},{"id":"CVE-1","ecosystem":"npm","package":"y","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
-		"missing ecosystem":    `{"advisories":[{"id":"CVE-1","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
-		"missing package":      `{"advisories":[{"id":"CVE-1","ecosystem":"npm","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
-		"empty affected":       `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[]}]}`,
-		"empty group":          `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[]]}]}`,
-		"unknown op":           `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":"~","version":"1.0.0"}]]}]}`,
-		"invalid bound ver":    `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"01.0.0"}]]}]}`,
+		"bad json":          `{not json`,
+		"missing id":        `{"advisories":[{"ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
+		"duplicate id":      `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]},{"id":"CVE-1","ecosystem":"npm","package":"y","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
+		"missing ecosystem": `{"advisories":[{"id":"CVE-1","package":"x","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
+		"missing package":   `{"advisories":[{"id":"CVE-1","ecosystem":"npm","affected":[[{"op":">=","version":"1.0.0"}]]}]}`,
+		"empty affected":    `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[]}]}`,
+		"empty group":       `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[]]}]}`,
+		"unknown op":        `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":"~","version":"1.0.0"}]]}]}`,
+		"invalid bound ver": `{"advisories":[{"id":"CVE-1","ecosystem":"npm","package":"x","affected":[[{"op":">=","version":"01.0.0"}]]}]}`,
 	}
 	for name, content := range bads {
 		fsys := fstest.MapFS{"db.json": &fstest.MapFile{Data: []byte(content)}}

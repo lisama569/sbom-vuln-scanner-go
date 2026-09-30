@@ -9,9 +9,9 @@ func TestConstraintContains(t *testing.T) {
 		want bool
 	}{
 		// Single closed interval boundary semantics.
-		{">=1.0.0 <1.5.0", "1.0.0", true},   // lower inclusive
+		{">=1.0.0 <1.5.0", "1.0.0", true}, // lower inclusive
 		{">=1.0.0 <1.5.0", "1.4.9", true},
-		{">=1.0.0 <1.5.0", "1.5.0", false},  // upper exclusive
+		{">=1.0.0 <1.5.0", "1.5.0", false}, // upper exclusive
 		{">=1.0.0 <1.5.0", "0.9.9", false},
 		// Pre-release participates by pure precedence.
 		{">=1.0.0 <1.5.0", "1.5.0-alpha", true},

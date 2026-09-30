@@ -86,7 +86,7 @@ func TestMatch_DirectTransitiveCountedOnce(t *testing.T) {
 func TestMatch_MultipleVersionsNoMissNoDoubleCount(t *testing.T) {
 	db := loadDB(t, boundaryDB)
 	m := parse.Merge("npm", "f", []component.Component{
-		{Ecosystem: "npm", Name: "p", Version: "1.2.0", Scope: component.ScopeDirect},   // vulnerable
+		{Ecosystem: "npm", Name: "p", Version: "1.2.0", Scope: component.ScopeDirect},     // vulnerable
 		{Ecosystem: "npm", Name: "p", Version: "1.5.0", Scope: component.ScopeTransitive}, // fixed
 	}, nil, nil)
 	found, err := New(db).Match(m)
